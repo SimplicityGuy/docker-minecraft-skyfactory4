@@ -24,7 +24,8 @@ This image wouldn't have been possible without the work of others, namely:
 
 - [TrueOsiris/docker-minecraft-skyfactory4](https://github.com/TrueOsiris/docker-minecraft-skyfactory4)
 - [jaysonsantos/docker-minecraft-ftb-skyfactory3](https://github.com/jaysonsantos/docker-minecraft-ftb-skyfactory3)
-  Thank you! 🙏🏻
+
+Thank you! 🙏🏻
 
 Also, a major shout-out to [Geoff](https://github.com/itzg) who maintains perhaps the most popular dockerized Minecraft
 server out there, [itzg/minecraft-server](https://github.com/itzg/docker-minecraft-server). Thank you a million times
