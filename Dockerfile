@@ -8,9 +8,11 @@ LABEL org.opencontainers.image.title="SkyFactory 4 Minecraft Server" \
       org.opencontainers.image.created="$(date +'%Y-%m-%d')" \
       org.opencontainers.image.base.name="docker.io/library/amazoncorretto:8"
 
+# hadolint ignore=DL3033
 RUN yum update -q -y && \
     yum install -q -y shadow-utils unzip wget && \
     yum upgrade -q -y && \
+    yum clean all && \
     useradd -U minecraft && \
     mkdir /feed-the-beast && \
     mkdir /data && \
@@ -26,6 +28,7 @@ RUN wget -q -c https://edge.forgecdn.net/files/3565/687/SkyFactory-4_Server_4_2_
     unzip -q /tmp/SkyFactory_4_Server.zip -d /feed-the-beast && \
     rm /tmp/SkyFactory_4_Server.zip
 
+# hadolint ignore=DL3003
 RUN cd /feed-the-beast && \
     bash -x Install.sh
 

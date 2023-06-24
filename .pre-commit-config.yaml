@@ -14,9 +14,19 @@ repos:
       - id: mixed-line-ending
       - id: trailing-whitespace
 
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.23.2
+    hooks:
+      - id: check-github-workflows
+
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.16
     hooks:
       - id: mdformat
         additional_dependencies:
           - mdformat-gfm
+
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.12.1-beta
+    hooks:
+      - id: hadolint

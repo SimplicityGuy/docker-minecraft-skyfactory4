@@ -1,5 +1,7 @@
 # Modern docker-based SkyFactory 4 Minecraft server
 
+![discogsography](https://github.com/SimplicityGuy/docker-minecraft-skyfactory4/actions/workflows/build.yml/badge.svg) ![License: MIT](https://img.shields.io/github/license/SimplicityGuy/docker-minecraft-skyfactory4) [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+
 You're probably thinking to yourself, "Oh great, ANOTHER SkyFactory 4 Minecraft Docker image!" Well, you're not
 wrong. However, there's good reason why this image was built.
 
