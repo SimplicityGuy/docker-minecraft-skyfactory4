@@ -1,0 +1,28 @@
+---
+name: cleanup
+
+on:
+  schedule:
+    - cron: '0 0 15 * *'
+
+env:
+  IMAGE_NAME: ${{ github.actor }}/minecraft-skyfactory4
+
+jobs:
+  cleanup-minecraft-skyfactory4:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Delete Docker images older than a month.
+        uses: snok/container-retention-policy@v2
+        with:
+          account-type: personal
+          cut-off: Two months ago UTC
+          keep-at-least: 2
+          skip-tags: latest
+          image-names: ${{ env.IMAGE_NAME }}
+          token: ${{ secrets.GHCR_TOKEN }}
