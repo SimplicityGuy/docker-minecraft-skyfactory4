@@ -1,0 +1,40 @@
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# GitHub
+.github/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Documentation (not needed in image)
+README.md
+LICENSE
+CLAUDE.md
+*.md
+!start.sh
+
+# Docker files (not needed in build context)
+docker-compose*.yml
+.dockerignore
+
+# Pre-commit
+.pre-commit-config.yaml
+
+# Logs
+*.log
+
+# Security - never include
+*.pem
+*.key
+*.crt
+*.cer
+.env
+.env.*

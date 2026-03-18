@@ -1,39 +1,42 @@
 ---
-name: cleanup
+name: Cleanup Docker Images
 
 on:
+  workflow_dispatch:
   schedule:
-    - cron: '0 0 15 * *'
+    - cron: "0 0 15 * *"
+
+concurrency:
+  group: cleanup-images-${{ github.ref }}
+  cancel-in-progress: false
 
 env:
-  IMAGE_NAME: ${{ github.actor }}/minecraft-skyfactory4
+  IMAGE_NAME: minecraft-skyfactory4
 
 jobs:
-  cleanup-minecraft-skyfactory4:
+  cleanup:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     permissions:
-      contents: read
       packages: write
+      contents: read
 
     steps:
-      - name: Delete Docker images older than a month.
-        id: cleanup-images
-        uses: snok/container-retention-policy@3b0972b2276b171b212f8c4efbca59ebba26eceb # v3.0.1
+      - name: Cleanup Docker Images
+        uses: dataaxiom/ghcr-cleanup-action@cd0cdb900b5dbf3a6f2cc869f0dbb0b8211f50c4 # v1.0.16
         with:
-          account-type: personal
-          cut-off: Two months ago UTC
-          keep-at-least: 2
-          skip-tags: latest
-          image-names: ${{ env.IMAGE_NAME }}
-          token: ${{ secrets.GHCR_TOKEN }}
+          delete-partial-images: true
+          delete-untagged: true
+          keep-n-tagged: 2
+          older-than: 30 days
+          token: ${{ secrets.GITHUB_TOKEN }}
+          package: ${{ env.IMAGE_NAME }}
+          owner: ${{ github.repository_owner }}
 
       - name: Send notification to Discord.
         uses: sarisia/actions-status-discord@eb045afee445dc055c18d3d90bd0f244fd062708 # v1.16.0
         if: always()
         with:
           title: ${{ env.IMAGE_NAME }}
-          description: |
-            succeded cleanup : ${{ steps.cleanup-images.outputs.deleted }}
-            failed cleanup   : ${{ steps.cleanup-images.outputs.failed }}
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
