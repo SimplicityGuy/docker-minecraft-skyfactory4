@@ -1,6 +1,6 @@
 # Modern docker-based SkyFactory 4 Minecraft server
 
-![discogsography](https://github.com/SimplicityGuy/docker-minecraft-skyfactory4/actions/workflows/build.yml/badge.svg) ![License: MIT](https://img.shields.io/github/license/SimplicityGuy/docker-minecraft-skyfactory4) [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+![build](https://github.com/SimplicityGuy/docker-minecraft-skyfactory4/actions/workflows/build.yml/badge.svg) ![License: MIT](https://img.shields.io/github/license/SimplicityGuy/docker-minecraft-skyfactory4) [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 
 You're probably thinking to yourself, "Oh great, ANOTHER SkyFactory 4 Minecraft Docker image!" Well, you're not
 wrong. However, there's good reason why this image was built.
@@ -38,7 +38,7 @@ over!! 🙌🏼
 To use the latest stable version, run:
 
 ```bash
-    docker run -dit -p 25565:25565 -e EULA=TRUE -v <path to where you want to store data>:/data --name mcs-sf ghcr.io/simplicityguy/minecraft-skyfactory4
+docker run -dit -p 25565:25565 -e EULA=TRUE -v <path to where you want to store data>:/data --name mcs-sf ghcr.io/simplicityguy/minecraft-skyfactory4
 ```
 
 Note the `EULA=TRUE` parameter. This assumes that you as the end-user have read and agreed to the EULA. I do not take responsibility
@@ -50,16 +50,85 @@ do so, you must `docker restart mcs-sf`. [This](https://pingperfect.com/index.ph
 It's a good idea to view the logs of the running container to get an idea of whether the server started correctly or not. To
 do so, use `docker logs -f mcs-sf`.
 
-There are a few common server settings exposed as environment variables, namely:
+### Environment Variables
 
-- `GENERATOR_SETTINGS`
-- `LEVEL_NAME`
-- `LEVEL_TYPE`
-- `MOTD`
+| Variable             | Default                             | Description                                                                        |
+| -------------------- | ----------------------------------- | ---------------------------------------------------------------------------------- |
+| `EULA`               | `FALSE`                             | Set to `TRUE` to accept the [Minecraft EULA](https://www.minecraft.net/en-us/eula) |
+| `MOTD`               | `SkyFactory 4.2.4 Minecraft Server` | Message of the day shown in the server browser                                     |
+| `LEVEL_NAME`         | _(empty)_                           | Name of the world/level                                                            |
+| `LEVEL_TYPE`         | `DEFAULT`                           | World generation type                                                              |
+| `GENERATOR_SETTINGS` | _(empty)_                           | Custom world generator settings                                                    |
+| `JVM_OPTS`           | `-Xms4048m -Xmx4048m`               | Java VM options (adjust for your machine's available RAM)                          |
 
-The Java VM options are also exposed as an environment variable. You may tweak these as necessary for your machine.
+### Docker Compose
 
-- `JVM_OPTS` (_default_: `-Xms4048m -Xmx4048m`)
+For a more persistent setup, create a `docker-compose.yml`:
+
+```yaml
+services:
+  minecraft:
+    image: ghcr.io/simplicityguy/minecraft-skyfactory4:latest
+    container_name: mcs-sf
+    ports:
+      - "25565:25565"
+    environment:
+      EULA: "TRUE"
+      MOTD: "My SkyFactory 4 Server"
+      JVM_OPTS: "-Xms4048m -Xmx4048m"
+    volumes:
+      - ./data:/data
+    restart: unless-stopped
+```
+
+Then run:
+
+```bash
+docker compose up -d
+```
+
+## Architecture
+
+The image is built on [Amazon Corretto 8](https://hub.docker.com/_/amazoncorretto) and includes
+SkyFactory 4.2.4 with Forge 1.12.2. Multi-architecture builds support both `linux/amd64` and `linux/arm64`.
+
+### CI/CD Pipeline
+
+Three GitHub Actions workflows automate the image lifecycle:
+
+```mermaid
+flowchart LR
+    subgraph Build["build (monthly + push)"]
+        B1[Checkout] --> B2[Login to GHCR]
+        B2 --> B3[Build multi-arch image]
+        B3 --> B4[Push to GHCR]
+        B4 --> B5[Discord notification]
+    end
+
+    subgraph Update["update-dependencies (weekly)"]
+        U1[Check base image digest] --> U2{Updates?}
+        U2 -->|Yes| U3[Test build]
+        U3 --> U4[Open PR]
+        U2 -->|No| U5[Skip]
+    end
+
+    subgraph Cleanup["cleanup (monthly)"]
+        C1[Find images > 2 months old] --> C2[Delete old images]
+        C2 --> C3[Discord notification]
+    end
+
+    Update -->|PR merged| Build
+```
+
+- **build** — Runs on push to `main`, on PRs, and on the 1st of each month. Builds and pushes multi-arch images to GitHub Container Registry (GHCR).
+- **update-dependencies** — Runs weekly on Mondays. Checks if the base Docker image has updates and opens a PR if so.
+- **cleanup** — Runs on the 15th of each month. Removes container images older than two months, keeping at least 2 and the `latest` tag.
+
+All GitHub Actions are pinned to specific commit SHAs for supply-chain security.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and guidelines.
 
 ## Issues?
 
