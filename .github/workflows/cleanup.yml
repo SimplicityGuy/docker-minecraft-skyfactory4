@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Delete Docker images older than a month.
         id: cleanup-images
-        uses: snok/container-retention-policy@v2
+        uses: snok/container-retention-policy@3b0972b2276b171b212f8c4efbca59ebba26eceb # v3.0.1
         with:
           account-type: personal
           cut-off: Two months ago UTC
@@ -29,7 +29,7 @@ jobs:
           token: ${{ secrets.GHCR_TOKEN }}
 
       - name: Send notification to Discord.
-        uses: sarisia/actions-status-discord@v1.12.0
+        uses: sarisia/actions-status-discord@eb045afee445dc055c18d3d90bd0f244fd062708 # v1.16.0
         if: always()
         with:
           title: ${{ env.IMAGE_NAME }}
