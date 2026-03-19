@@ -31,4 +31,4 @@ if [[ -n "$GENERATOR_SETTINGS" ]]; then
     sed -i "/generator-settings\s*=/ c generator-settings=$GENERATOR_SETTINGS" /data/server.properties
 fi
 
-java "$JVM_OPTS" -jar /feed-the-beast/$FORGE_JAR nogui
+java $JVM_OPTS -jar /feed-the-beast/$FORGE_JAR nogui
