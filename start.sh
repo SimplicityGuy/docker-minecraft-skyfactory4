@@ -3,6 +3,8 @@
 set -e
 FORGE_JAR="forge-1.12.2-14.23.5.2860.jar"
 
+cp -a -n /feed-the-beast/. /data/
+
 cd /data
 
 if [[ ! -f /data/server.properties ]]; then

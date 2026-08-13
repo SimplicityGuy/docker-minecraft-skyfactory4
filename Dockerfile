@@ -19,12 +19,13 @@ RUN yum update -q -y && \
     chown -R minecraft:minecraft /feed-the-beast && \
     chown -R minecraft:minecraft /data
 
+# hadolint ignore=DL3066
 USER minecraft:minecraft
 
 COPY start.sh /runtime/start.sh
 
-#   Pull file redirected from https://www.curseforge.com/minecraft/modpacks/skyfactory-4/download/3012800/file
-RUN wget -q -c https://edge.forgecdn.net/files/3565/687/SkyFactory-4_Server_4_2_4.zip -O /tmp/SkyFactory_4_Server.zip && \
+#   Pull file redirected from https://www.curseforge.com/minecraft/modpacks/skyfactory-4/download/3565687
+RUN wget -q -c https://mediafilez.forgecdn.net/files/3565/687/SkyFactory-4_Server_4_2_4.zip -O /tmp/SkyFactory_4_Server.zip && \
     unzip -q /tmp/SkyFactory_4_Server.zip -d /feed-the-beast && \
     rm /tmp/SkyFactory_4_Server.zip
 
