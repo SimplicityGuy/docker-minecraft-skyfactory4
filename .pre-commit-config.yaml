@@ -17,7 +17,7 @@ repos:
       - id: trailing-whitespace
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 8db279a37c552206d2df62269ff6f9d31125815a  # frozen: 0.37.0
+    rev: 0494aa7fa1314e98913a41227d8f0a515b2c1049  # frozen: 0.38.2
     hooks:
       - id: check-github-workflows
 
@@ -29,6 +29,6 @@ repos:
           - mdformat-gfm
 
   - repo: https://github.com/hadolint/hadolint
-    rev: 4e697ba704fd23b2409b947a319c19c3ee54d24f  # frozen: v2.14.0
+    rev: 2eece55955ced00200be9729e9728cb7dacca505  # frozen: v2.15.1
     hooks:
       - id: hadolint
