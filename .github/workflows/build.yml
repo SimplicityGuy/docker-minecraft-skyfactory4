@@ -14,7 +14,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.actor }}/minecraft-skyfactory4
+  IMAGE_NAME: ${{ github.repository_owner }}/minecraft-skyfactory4
 
 jobs:
   build-minecraft-skyfactory4:
