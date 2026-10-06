@@ -18,7 +18,12 @@ updates:
     assignees:
       - "SimplicityGuy"
     groups:
-      actions:
+      actions-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+      actions-version:
+        applies-to: version-updates
         patterns:
           - "*"
 
@@ -38,3 +43,35 @@ updates:
       - "docker"
     assignees:
       - "SimplicityGuy"
+    groups:
+      docker-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+      docker-version:
+        applies-to: version-updates
+        patterns:
+          - "*"
+
+  # pre-commit hooks
+  - package-ecosystem: "pre-commit"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Los_Angeles"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    assignees:
+      - "SimplicityGuy"
+    groups:
+      pre-commit-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+      pre-commit-version:
+        applies-to: version-updates
+        patterns:
+          - "*"
